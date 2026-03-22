@@ -7,29 +7,63 @@ import { CVSection } from "./components/sections/CVSection";
 export default function Home() {
   return (
     <main className="relative min-h-screen bg-[#080808] text-[#F8F8FF] overflow-hidden">
-      {/* Background */}
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_#121212,_#080808)]" />
+
+      {/* Dither-like noise background via CSS */}
+      <div
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "300px",
+        }}
+      />
+
+      {/* Subtle radial glow from top */}
+      <div className="fixed inset-0 -z-20 bg-[radial-gradient(ellipse_80%_40%_at_50%_0%,_#1f0800,_#080808)]" />
 
       {/* Nav */}
-      <nav className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-sm border-b border-white/5">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <span className="font-bold text-[#ff6a00] tracking-widest font-mono">
-            @SurfingWhale 🐋
+      <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/[0.04] bg-[#080808]/80 backdrop-blur-sm">
+        <div className="container mx-auto px-6 h-12 flex items-center justify-between">
+          <span className="font-mono text-sm text-[#ff6a00] tracking-[0.3em] uppercase">
+            @SurfingWhale
           </span>
-          <div className="flex gap-6 text-sm text-white/60">
-            <a href="#" className="hover:text-white transition-colors">Home</a>
-            <a href="#project" className="hover:text-white transition-colors">Projects</a>
-            <a href="#CV" className="hover:text-white transition-colors">CV</a>
+          <div className="flex gap-8 text-xs font-mono text-white/40 tracking-widest uppercase">
+            <a href="#" className="hover:text-white transition-colors duration-300">Home</a>
+            <a href="#project" className="hover:text-white transition-colors duration-300">Projects</a>
+            <a href="#CV" className="hover:text-white transition-colors duration-300">CV</a>
+            <a
+              href="https://wa.me/6285156964766"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#ff6a00] hover:text-[#ffd500] transition-colors duration-300"
+            >
+              Contact
+            </a>
           </div>
         </div>
       </nav>
 
       {/* Content */}
-      <div className="container mx-auto px-4 pt-20">
+      <div className="pt-12">
         <HeroSection />
-        <CVSection />
         <ProjectSectionWrapper />
+        <CVSection />
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-white/[0.04] py-6 px-6 mt-16">
+        <div className="container mx-auto flex justify-between items-center">
+          <span className="font-mono text-xs text-[#ff6a00] tracking-widest">
+            SURFINGWHALE_TERMINAL [ONLINE]
+          </span>
+          <span className="font-mono text-xs text-white/20">
+            © {new Date().getFullYear()} MUHAMMAD_FAUZY
+          </span>
+          <span className="font-mono text-xs text-white/20">
+            ● SYSTEM_STATUS_NOMINAL
+          </span>
+        </div>
+      </footer>
     </main>
   );
 }

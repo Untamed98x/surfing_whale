@@ -10,11 +10,13 @@
   "dependencies": {
     "@netlify/plugin-nextjs": "^5.15.9",
     "@splinetool/runtime": "^1.12.70",
+    "@types/three": "^0.183.1",
     "framer-motion": "^12.38.0",
     "next": "16.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "swiper": "^12.1.2"
+    "swiper": "^12.1.2",
+    "three": "^0.183.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
