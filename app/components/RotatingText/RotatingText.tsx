@@ -13,8 +13,8 @@ import {
   AnimatePresence,
   Transition,
   type VariantLabels,
+  type animationControls as animationControls,
   type Target,
-  type AnimationControls,
   type TargetAndTransition,
 } from "framer-motion";
 
