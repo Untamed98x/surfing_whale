@@ -24,20 +24,19 @@ const ScrollVelocity = dynamic(
         if (!canvas) return;
 
         let animId: number;
-        let renderer: any, scene: any, camera: any, particles: any;
 
         const init = async () => {
         const THREE = await import("three");
 
         // Renderer
-        renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
         renderer.setClearColor(0x000000, 0);
 
         // Scene + Camera
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(60, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
         camera.position.z = 80;
 
         // Particles
@@ -46,19 +45,19 @@ const ScrollVelocity = dynamic(
         const colors = new Float32Array(count * 3);
 
         for (let i = 0; i < count; i++) {
-            positions[i * 3] = (Math.random() - 0.5) * 200;
+            positions[i * 3]     = (Math.random() - 0.5) * 200;
             positions[i * 3 + 1] = (Math.random() - 0.5) * 200;
             positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
 
             // Mix orange (#ff6a00) and white particles
             const isOrange = Math.random() > 0.7;
             if (isOrange) {
-            colors[i * 3] = 1.0;
+            colors[i * 3]     = 1.0;
             colors[i * 3 + 1] = 0.42;
             colors[i * 3 + 2] = 0.0;
             } else {
             const brightness = 0.1 + Math.random() * 0.2;
-            colors[i * 3] = brightness;
+            colors[i * 3]     = brightness;
             colors[i * 3 + 1] = brightness;
             colors[i * 3 + 2] = brightness;
             }
@@ -76,7 +75,7 @@ const ScrollVelocity = dynamic(
             sizeAttenuation: true,
         });
 
-        particles = new THREE.Points(geo, mat);
+        const particles = new THREE.Points(geo, mat);
         scene.add(particles);
 
         // Resize handler
@@ -99,14 +98,18 @@ const ScrollVelocity = dynamic(
         };
         animate();
 
-        return () => window.removeEventListener("resize", onResize);
+        return () => {
+            window.removeEventListener("resize", onResize);
+            renderer.dispose();
+        };
         };
 
-        init();
+        let cleanup: (() => void) | undefined;
+        init().then((fn) => { cleanup = fn; });
 
         return () => {
         cancelAnimationFrame(animId);
-        if (renderer) renderer.dispose();
+        cleanup?.();
         };
     }, []);
 
@@ -127,7 +130,7 @@ const ScrollVelocity = dynamic(
     return (
         <section className="relative w-full mt-16">
 
-        {/* ScrollVelocity atas — kept original */}
+        {/* ScrollVelocity atas */}
         <ScrollVelocity
             texts={["My Projects", "Scroll Down", "Data Gardener"]}
             className="text-white bg-black py-2"
