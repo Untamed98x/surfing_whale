@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@netlify/plugin-nextjs": "^5.15.9",
+    "@notionhq/client": "^5.14.0",
     "@sparticuz/chromium": "^143.0.4",
     "@splinetool/runtime": "^1.12.70",
     "@types/three": "^0.183.1",
