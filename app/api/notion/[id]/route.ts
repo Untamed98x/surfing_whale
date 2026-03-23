@@ -4,10 +4,11 @@ import { getPageBlocks } from "@/app/lib/notion";
 
 export async function GET(
     _req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
     ) {
     try {
-        const blocks = await getPageBlocks(params.id);
+        const { id } = await params;
+        const blocks = await getPageBlocks(id);
         return NextResponse.json({ blocks });
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
