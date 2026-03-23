@@ -38,31 +38,31 @@ function SplineBackground() {
         <div className="absolute inset-0 bg-black/30 z-10" />
 
         {/* Content */}
-        <div className="relative z-20 flex flex-col items-center gap-6 px-6 text-center max-w-3xl mx-auto">
+        <div className="relative z-20 flex flex-col items-center gap-5 px-4 md:px-6 text-center max-w-3xl mx-auto w-full">
 
             {/* Label */}
             <span className="font-mono text-[10px] text-[#ff6a00] tracking-[0.4em] uppercase border border-[#ff6a00]/20 px-4 py-1.5 bg-[#ff6a00]/5">
             [ DATA_STORIES ]
             </span>
 
-            {/* Headline */}
-            <h2 className="font-black leading-[0.9] tracking-tight">
-            <span className="block text-6xl md:text-8xl text-white">
+            {/* Headline — clamp biar ga overflow di mobile */}
+            <h2 className="font-black leading-[0.9] tracking-tight w-full overflow-hidden">
+            <span className="block text-[clamp(2.8rem,12vw,5rem)] text-white">
                 NUMBERS
             </span>
-            <span className="block text-6xl md:text-8xl text-[#ff6a00]">
+            <span className="block text-[clamp(2.2rem,9vw,5rem)] text-[#ff6a00]">
                 TELL_STORIES
             </span>
             </h2>
 
             {/* Sub */}
-            <p className="text-white/40 max-w-md text-sm md:text-base leading-relaxed font-mono">
+            <p className="text-white/40 max-w-md text-xs md:text-sm leading-relaxed font-mono">
             From raw numbers to meaningful insights — data analyst by day,
             creative thinker always. Here's what I've built.
             </p>
 
-            {/* Stats */}
-            <div className="flex gap-12 md:gap-20 py-6 border-y border-white/[0.06] w-full justify-center">
+            {/* Stats — 2x2 grid di mobile, row di desktop */}
+            <div className="grid grid-cols-2 md:flex md:flex-row gap-6 md:gap-16 py-6 border-y border-white/[0.06] w-full justify-center">
             {[
                 { value: "8+", label: "PROJECTS" },
                 { value: "3+", label: "YEARS_EXP" },
@@ -70,19 +70,19 @@ function SplineBackground() {
                 { value: "0.02s", label: "RESPONSE" },
             ].map((stat) => (
                 <div key={stat.label} className="text-center">
-                <div className="font-black text-3xl md:text-4xl text-white">{stat.value}</div>
+                <div className="font-black text-2xl md:text-4xl text-white">{stat.value}</div>
                 <div className="font-mono text-[9px] text-white/30 tracking-widest uppercase mt-1">{stat.label}</div>
                 </div>
             ))}
             </div>
 
             {/* CTAs */}
-            <div className="flex gap-4 mt-2">
+            <div className="flex gap-3 mt-2 w-full flex-wrap justify-center">
             <a
                 href={CV_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-8 py-4 rounded-sm bg-[#ff6a00] text-black font-mono font-bold text-sm tracking-widest hover:bg-[#ffd500] transition-all duration-300 uppercase"
+                className="flex-1 min-w-[140px] text-center px-4 py-3 rounded-sm bg-[#ff6a00] text-black font-mono font-bold text-xs tracking-widest hover:bg-[#ffd500] transition-all duration-300 uppercase"
             >
                 Explore_My_Work →
             </a>
@@ -90,7 +90,7 @@ function SplineBackground() {
                 href="https://github.com/Untamed98x"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-8 py-4 rounded-sm border border-white/10 text-white/60 font-mono font-bold text-sm tracking-widest hover:border-white/30 hover:text-white transition-all duration-300 uppercase"
+                className="flex-1 min-w-[140px] text-center px-4 py-3 rounded-sm border border-white/10 text-white/60 font-mono font-bold text-xs tracking-widest hover:border-white/30 hover:text-white transition-all duration-300 uppercase"
             >
                 GitHub_Profile
             </a>
@@ -98,4 +98,4 @@ function SplineBackground() {
         </div>
         </section>
     );
-    }
+}
