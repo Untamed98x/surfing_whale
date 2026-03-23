@@ -1,11 +1,20 @@
 // app/lib/notion.ts
-
 export interface NotionProject {
     id: string;
     title: string;
     link: string;
     tags: string[];
     image: string;
+    date: string;
+    subGroup: string;
+    }
+
+    export interface NotionBlock {
+    type: string;
+    text?: string;
+    language?: string; // for code blocks
+    url?: string;      // for images
+    caption?: string;
     }
 
     export async function getProjects(): Promise<NotionProject[]> {
@@ -27,19 +36,74 @@ export interface NotionProject {
         next: { revalidate: 3600 },
         }
     );
-
     if (!res.ok) {
         console.error("Notion API error:", await res.text());
         return [];
     }
-
     const data = await res.json();
-
     return data.results.map((page: any) => ({
         id: page.id,
         title: page.properties.Name?.title?.[0]?.plain_text ?? "Untitled",
         link: page.properties.Citation?.rich_text?.[0]?.plain_text ?? "#",
         tags: page.properties.Tags?.multi_select?.map((t: any) => t.name) ?? [],
         image: page.properties.Image?.url ?? "/images/placeholder.png",
+        date: page.properties.Date?.date?.start ?? "",
+        subGroup: page.properties["Sub Group"]?.status?.name ?? "",
     }));
+    }
+
+    export async function getPageBlocks(pageId: string): Promise<NotionBlock[]> {
+    const res = await fetch(
+        `https://api.notion.com/v1/blocks/${pageId}/children?page_size=50`,
+        {
+        headers: {
+            Authorization: `Bearer ${process.env.NOTION_API_KEY}`,
+            "Notion-Version": "2022-06-28",
+        },
+        next: { revalidate: 3600 },
+        }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+
+    return data.results.map((block: any): NotionBlock => {
+        const type = block.type;
+
+        // Extract plain text from rich_text array
+        const extractText = (richText: any[]) =>
+        richText?.map((t: any) => t.plain_text).join("") ?? "";
+
+        switch (type) {
+        case "paragraph":
+            return { type: "paragraph", text: extractText(block.paragraph?.rich_text) };
+        case "heading_1":
+            return { type: "heading_1", text: extractText(block.heading_1?.rich_text) };
+        case "heading_2":
+            return { type: "heading_2", text: extractText(block.heading_2?.rich_text) };
+        case "heading_3":
+            return { type: "heading_3", text: extractText(block.heading_3?.rich_text) };
+        case "bulleted_list_item":
+            return { type: "bulleted_list_item", text: extractText(block.bulleted_list_item?.rich_text) };
+        case "numbered_list_item":
+            return { type: "numbered_list_item", text: extractText(block.numbered_list_item?.rich_text) };
+        case "code":
+            return {
+            type: "code",
+            text: extractText(block.code?.rich_text),
+            language: block.code?.language ?? "plaintext",
+            };
+        case "image":
+            return {
+            type: "image",
+            url: block.image?.file?.url ?? block.image?.external?.url ?? "",
+            caption: extractText(block.image?.caption),
+            };
+        case "divider":
+            return { type: "divider" };
+        case "quote":
+            return { type: "quote", text: extractText(block.quote?.rich_text) };
+        default:
+            return { type: "unsupported" };
+        }
+    }).filter((b: NotionBlock) => b.type !== "unsupported");
     }
